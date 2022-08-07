@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
+#spring:
+#  cache:
+#    cache-names: 'default'
+#    type: caffeine
+#    caffeine:
+#      spec: 'maximumSize=5000 , expireAfterAccess = 10s'
+#    redis:
+#      cache-null-values: false
+#      time-to-live: 1000000
+
+logging:
+  level:
+    root: INFO
+    ru:
+      rosbank:
+        optimization: DEBUG
+
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: optimization-app
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+
+
