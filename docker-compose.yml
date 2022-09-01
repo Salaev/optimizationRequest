@@ -1,0 +1,58 @@
+---
+version: '3'
+
+networks:
+  meetup_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.19.0.0/24
+          gateway: 172.19.0.1
+
+services:
+
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    networks:
+      - meetup_network
+    hostname: prometheus
+    container_name: prometheus
+    ports:
+     - "9090:9090"
+    volumes:
+     - C:\Docker\meetup\prometheus\prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:9.0.5
+    networks:
+      - meetup_network
+    hostname: grafana
+    container_name: grafana
+    ports:
+     - "3000:3000"
+    volumes:
+     - C:\Docker\meetup\grafana\storage:/var/lib/grafana
+
+  cache:
+    image: "redis"
+    networks:
+      - meetup_network
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+
+#  postgres:
+#    image: 'postgres:12.10'
+#    networks:
+#      - meetup_network
+#    hostname: postgres
+#    container_name: postgres
+#    ports:
+#      - 5432:5432
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: database
